@@ -1,6 +1,6 @@
 # Spatialgineers MCP Server
 
-Node.js MCP server exposing Spatialgineers' core knowledge as 3 queryable tools.
+Node.js MCP server exposing Spatialgineers' core knowledge as 4 queryable tools.
 
 ## Tools
 | Tool | Returns |
@@ -8,6 +8,7 @@ Node.js MCP server exposing Spatialgineers' core knowledge as 3 queryable tools.
 | `get_studio_info` | Studio, founders, specialties, projects, URLs |
 | `get_summit_status` | Summit 2026: dates, program, prizes, sponsors, critical path |
 | `get_sgx_framework` | SGX Guild: pillars, ranks, evaluation, Trials, La Germinadora |
+| `get_brand_guide` | Official brand guide: colors (hex), typography, panels, HUD rules |
 
 ## Local dev
 ```bash

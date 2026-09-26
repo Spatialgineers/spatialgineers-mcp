@@ -1,0 +1,10 @@
+{
+  "name": "spatialgineers-mcp",
+  "version": "1.0.0",
+  "description": "MCP server exposing Spatialgineers studio, Summit 2026, and SGX Framework data",
+  "type": "module",
+  "main": "server.js",
+  "scripts": { "start": "node server.js", "dev": "node --watch server.js" },
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": { "@modelcontextprotocol/sdk": "^1.0.0", "zod": "^3.22.0" }
+}

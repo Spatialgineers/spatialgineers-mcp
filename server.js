@@ -52,17 +52,45 @@ const httpServer = createServer(async (req, res) => {
 
   if (req.url === "/mcp") {
     if (req.method === "POST") {
+      // Collect body
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      const body = Buffer.concat(chunks).toString();
+
+      let parsed;
+      try {
+        parsed = JSON.parse(body);
+      } catch {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
+        return;
+      }
+
       const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+
+      // Intercept the transport's response to force Content-Type
+      const originalHandleRequest = transport.handleRequest.bind(transport);
+      transport.handleRequest = async (req, res) => {
+        const originalWriteHead = res.writeHead.bind(res);
+        res.writeHead = (statusCode, headers) => {
+          const merged = Object.assign({ "Content-Type": "application/json" }, headers || {});
+          return originalWriteHead(statusCode, merged);
+        };
+        return originalHandleRequest(req, res);
+      };
+
       res.on("close", () => transport.close());
       await server.connect(transport);
       await transport.handleRequest(req, res);
       return;
     }
+
     if (req.method === "GET") {
       res.writeHead(405, { "Content-Type": "application/json", "Allow": "POST" });
       res.end(JSON.stringify({ error: "Method Not Allowed. Use POST /mcp" }));
       return;
     }
+
     if (req.method === "DELETE") {
       res.writeHead(200);
       res.end();
